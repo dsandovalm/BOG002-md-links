@@ -25,14 +25,16 @@ function mdLinks (pathName, options = {validate:false}) {
             let dirFiles = [];
             let links = [];
             getDir(pathName, dirFiles, ['node_modules']);
-            dirFiles.forEach(filePath => {
-              readFile(filePath, options.validate).then( (result) => {
-                links = links.concat(result)
-              }).catch((error) => {
-                console.log(':(', error)//reject(new Error(error));
-              });
+            let promises = dirFiles.map(filePath => {
+              return readFile(filePath, options.validate)
             })
-
+            Promise.all(promises).then((values) => {
+              links = links.concat(values);
+              resolve(links)
+            }).catch((error) => {
+              reject(new Error(error));
+            });
+           
             /*
             dirFiles.forEach(filePath => {
               readFile(filePath, options.validate).then( (result) => {
@@ -43,7 +45,6 @@ function mdLinks (pathName, options = {validate:false}) {
                 reject(new Error(error));
               });
             })
-
             let promises = dirFiles.map(filePath => {
               return readFile(filePath, options.validate)
             })
@@ -74,24 +75,3 @@ function mdLinks (pathName, options = {validate:false}) {
 module.exports = (pathName, options) => {
   return mdLinks(pathName, options)
 };
-
-mdLinks('../SocialNetwork/noExiste.txt').then(result => 
-  console.log(result)
-).catch(error =>
-  console.log(error)
-);
-/*mdLinks('./README.md', {validate:true}).then(result => 
-  console.log(result)
-).catch(error =>
-  console.log(error)
-);
-mdLinks('../SocialNetwork/README.md', {validate: true}).then(result => 
-  console.log(' SN README ' , result)
-).catch(error =>
-  console.log(error)
-);*/
-mdLinks('../DataLovers',{validate:true}).then(result => 
-  console.log(' DATALOVERS ',result)
-).catch(error =>
-  console.log(error)
-);
