@@ -76,24 +76,3 @@ function mdLinks (pathName, options = {validate:false}) {
 module.exports = (pathName, options) => {
   return mdLinks(pathName, options)
 };
-
-mdLinks('../SocialNetwork/noExiste.txt').then(result => 
-  console.log(result)
-).catch(error =>
-  console.log(error)
-);
-/*mdLinks('./README.md', {validate:true}).then(result => 
-  console.log(result)
-).catch(error =>
-  console.log(error)
-);
-mdLinks('../SocialNetwork/README.md', {validate: true}).then(result => 
-  console.log(' SN README ' , result)
-).catch(error =>
-  console.log(error)
-);*/
-mdLinks('../DataLovers',{validate:true}).then(result => 
-  console.log(' DATALOVERS ',result)
-).catch(error =>
-  console.log(error)
-);
