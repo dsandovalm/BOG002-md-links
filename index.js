@@ -25,14 +25,16 @@ function mdLinks (pathName, options = {validate:false}) {
             let dirFiles = [];
             let links = [];
             getDir(pathName, dirFiles, ['node_modules']);
-            dirFiles.forEach(filePath => {
-              readFile(filePath, options.validate).then( (result) => {
-                links = links.concat(result)
-              }).catch((error) => {
-                console.log(':(', error)//reject(new Error(error));
-              });
+            let promises = dirFiles.map(filePath => {
+              return readFile(filePath, options.validate)
             })
-
+            Promise.all(promises).then((values) => {
+              links = links.concat(values);
+              resolve(links)
+            }).catch((error) => {
+              reject(new Error(error));
+            });
+           
             /*
             dirFiles.forEach(filePath => {
               readFile(filePath, options.validate).then( (result) => {
