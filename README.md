@@ -34,7 +34,7 @@ npm install minimist
 3. Probar `md-links`. Debería aparecer un pequeño menú
 ***
 
-El módulo se puede instalar desde (---)
+El módulo se puede instalar desde `npm i @dsandovalm/md-links`
 
 ### Uso
 
