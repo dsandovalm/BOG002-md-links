@@ -8,6 +8,31 @@ Este módulo de **node.js** permite encontrar y listar los links que se encuentr
 
 ### Instalación
 
+***
+**Provisional**
+
+1. Descargar y descomprimir este repo
+
+2. Instalar dependencias
+<code>
+npm install node-fetch
+
+npm install path
+
+npm install fs
+
+npm install chalk
+
+npm install minimist
+</code>
+
+2. Linkear
+
+`npm link`
+
+3. Probar `md-links`. Debería aparecer un pequeño menú
+***
+
 El módulo se puede instalar desde (---)
 
 ### Uso
