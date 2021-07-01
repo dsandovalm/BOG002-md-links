@@ -3,6 +3,16 @@ const path = require('path');
 const getDir = require('./lib/getFiles').getDir;
 const readFile = require('./lib/reader');
 
+function splitArrays(matrix){
+  let split = [];
+  matrix.forEach(array => {
+    array.forEach(element => {
+      split.push(element);
+    })
+  })
+  return split;
+}
+
 function mdLinks (pathName, options = {validate:false}) {
   // Retorna una promesa que resuelve los links o un error
   return new Promise(
@@ -23,45 +33,18 @@ function mdLinks (pathName, options = {validate:false}) {
           case '':
             //Leer carpeta
             let dirFiles = [];
-            let links = [];
             getDir(pathName, dirFiles, ['node_modules']);
             let promises = dirFiles.map(filePath => {
               return readFile(filePath, options.validate)
             })
             Promise.all(promises).then((values) => {
-              links = links.concat(values);
-              resolve(links)
+              resolve(splitArrays(values));
+              //resolve(links)
             }).catch((error) => {
               reject(new Error(error));
             });
-           
-            /*
-            dirFiles.forEach(filePath => {
-              readFile(filePath, options.validate).then( (result) => {
-                result.forEach(l => {
-                  links.push(l)
-                });
-              }).catch((error) => {
-                reject(new Error(error));
-              });
-            })
-
-            let promises = dirFiles.map(filePath => {
-              return readFile(filePath, options.validate)
-            })
-            Promise.all(promises).then((values) => {
-              console.log(values)
-              values.forEach(l => {
-                links.push(l)
-              });
-              resolve(links)
-            }).catch((error) => {
-              reject(new Error(error));
-            });
-            */
-
-            resolve(links);
             break;
+
           default:
             reject( new Error(`El archivo no tiene una extensión válida`));
             break;
