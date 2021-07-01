@@ -1,5 +1,7 @@
 const mdLinks = require('../index.js');
 
+jest.setTimeout(60000);
+
 describe('Lectura de archivos', () => {
   it('Debe retornar un arreglo de objetos',  () => {
     expect.assertions(1);
@@ -36,49 +38,51 @@ describe('Lectura de carpetas', () => {
   });
   it('Debe retornar 9 links', () => {
     expect.assertions(1);
-    return mdLinks('./test/testdir/testfile.md').then(data => {
-      console.log(data)
+    return mdLinks('./test/testdir').then(data => {
       expect(data.length).toBe(9);
     });
   });
 });
 
 describe('Validacion', () => {
-  test('Debe retornar un arreglo de objetos', async (done) => {
-    const response = await mdLinks('Users/julieth/Documents/Laboratoria/Duplas/MDLinks/README.md');
+  it('Debe retornar un arreglo de objetos', () => {
+    expect.assertions(1);
+    return mdLinks('./test/testdir/testfile.md', {validate:true}).then(data => {
+      expect(typeof data).toBe('object');
+    });
+  });
+
+  /*test('Debe retornar un arreglo de objetos', async (done) => {
+    const response = await mdLinks('./test/testdir/testfile.md', {validate:true});
     expect(typeof response).toBe('object');
     done();
+  });*/
+  it('Debe retornar 4 links con status 200', () => {
+    expect.assertions(1);
+    return mdLinks('./test/testdir/testfile.md', {validate:true}).then(data => {
+      let valid = 0;
+      data.map((link) => {
+        if(link.status === 200){
+          valid++
+        }
+      })
+      expect(valid).toBe(4);
+    });
   });
+  /*
   test('Debe retornar 4 links con status 200', async (done) => {
-    const response = await mdLinks('Users/julieth/Documents/Laboratoria/Duplas/MDLinks/README.md');
-    let valid = [];
+    const response = await mdLinks('./test/testdir/testfile.md',{validate:true});
+    let valid = 0;
     response.map((link) => {
-      if(link.href === 200){
-        valid.push(link)
+      console.log(link.status)
+      if(link.status === 200){
+        valid++
       }
     })
-    expect(valid.length).toBe(4);
+    expect(valid).toBe(4);
     done();
-  });
+  });*/
 });
-
-/*
-describe('Validacion', () => {
-  it('Debe retornar un arreglo de objetos',  () => {
-    expect.assertions(1);
-    return mdLinks('./test/testdir/testfile.md',{validate:true}).then(data => {
-      expect(typeof data).toBe('object');
-    });
-  });
-  it('Debe retornar 4 links con status 200',  () => {
-    expect.assertions(1);
-    return mdLinks('./test/testdir/testfile.md',{validate:true}).then(data => {
-      console.log(data);
-      expect(typeof data).toBe('object');
-    });
-  });
-});
-*/
 
 describe('Errores', () => {
   it('Ruta que no existe',  () => {
